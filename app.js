@@ -24,17 +24,28 @@ const p4 = document.createElement('p');
 second.append(p3);
 second.append(p4);
 
-
 axios.get(`https://official-joke-api.appspot.com/jokes/programming/random`)
     .then(res => {
-        const jokeJS2 = res.data[0];
-        p3.innerText = res.data[0].setup;
-        p4.innerText = res.data[0].punchline;
-    })
-    .catch(err => {
-        console.log(err);
-    }); 
+            // 'res' is parameter that will hold the jokeJS2 value
+        const jokeJS2 = res;
+    // For whatever reason the programming joke api is coming back in an array which requires data[index].setup etc. 
+        p3.innerText = jokeJS2.data[0].setup;
+        p4.innerText = jokeJS2.data[0].punchline;
+    })   
+    .catch(err => console.log(err)); 
 
+/*
+
+axios.get(`https://official-joke-api.appspot.com/jokes/random`)
+  .then(res => {
+    const jokeJS2 = res;
+    console.log(jokeJS2);
+    // This jokes/random api isn't returning data in the same format as the programming one above - just returning an object/ not an array.
+    p3.innerText = jokeJS2.data.setup;
+    p4.innerText = jokeJS2.data.punchline;
+  })
+  .catch(err => console.log(err));
+*/
 
 
 // 3
@@ -62,12 +73,13 @@ const fourth = document.querySelector('#fourth');
 const p7 = document.createElement('p');
 fourth.append(p7);
 
-const baseEndpoint = `http://api.tvmaze.com/`;
 const id = `38963`;
 const season = `1`;
 const number = `8`;
-const episodeSearchURL = `shows/${id}/episodebynumber?season=${season}&number=${number}`;
-const fullEndpoint = baseEndpoint + episodeSearchURL
+const rootURL = `http://api.tvmaze.com/`;
+const epidsodeByNumberURL = `shows/${id}/episodebynumber?season=${season}&number=${number}`;
+const fullEndpoint = rootURL + epidsodeByNumberURL;
+// const fullURL = `http://api.tvmaze.com/shows/${id}/episodebynumber?season=${season}&numbers=${number}`;
 
 async function tvMazeFunc() {
     try {
@@ -82,25 +94,33 @@ tvMazeFunc();
 
 
 
-// BONUS 
 
+
+// BONUS 
+// I don't think this is the way you were asking, but it works. I was only able to get the img url in the webpage and no picture using parameter in a URL.
+/*
 const body = document.querySelector(`body`);
 let img = new Image();
 const div = document.createElement('div');
 body.append(div);
 
 img.onload = function() {
-    div.appendChild(img);
+    div.append(img);
 }
 img.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png";
-
-/*
-const body = document.querySelector(`body`);
-let img = new Image();
-let div = document.createElement('div');
-body.append(div);
-img.onload = function() {
-    div.appendChild(img);
-};
-img.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png";
 */
+
+// "GET" img from pokiAPI
+const body = document.querySelector(`body`);
+const img = document.createElement(`img`);
+body.append(img);
+async function pokeFunc() {
+    try {
+        const pokeData = await axios.get(`https://pokeapi.co/api/v2/pokemon/pikachu`);
+        // img.src = pokeData.data.sprites.front_default;
+        img.src = pokeData.data.sprites.other.dream_world.front_default;
+    } catch (err) {
+        console.log(err);
+    }
+}
+pokeFunc();
