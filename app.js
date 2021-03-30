@@ -97,7 +97,24 @@ tvMazeFunc();
 
 
 // BONUS 
-// I don't think this is the way you were asking, but it works. I was only able to get the img url in the webpage and no picture using parameter in a URL.
+
+// "GET" img from pokiAPI
+const body = document.querySelector(`body`);
+const img = document.createElement(`img`);
+body.append(img);
+async function pokeFunc() {
+    try {
+        const pokeData = await axios.get(`https://pokeapi.co/api/v2/pokemon/pikachu`);
+        img.src = pokeData.data.sprites.other.dream_world.front_default;
+        // img.src = pokeData.data.sprites.front_default;
+    } catch (err) {
+        console.log(err);
+    }
+}
+pokeFunc();
+
+
+// Img using direct url 
 /*
 const body = document.querySelector(`body`);
 let img = new Image();
@@ -109,18 +126,3 @@ img.onload = function() {
 }
 img.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png";
 */
-
-// "GET" img from pokiAPI
-const body = document.querySelector(`body`);
-const img = document.createElement(`img`);
-body.append(img);
-async function pokeFunc() {
-    try {
-        const pokeData = await axios.get(`https://pokeapi.co/api/v2/pokemon/pikachu`);
-        // img.src = pokeData.data.sprites.front_default;
-        img.src = pokeData.data.sprites.other.dream_world.front_default;
-    } catch (err) {
-        console.log(err);
-    }
-}
-pokeFunc();
